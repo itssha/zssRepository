@@ -1,0 +1,13 @@
+同花顺行业数据  http://data.10jqka.com.cn/funds/hyzjl/
+
+同花顺概念数据 http://data.10jqka.com.cn/funds/gnzjl/#refCountId=data_55f13c2c_254
+
+
+code_group 中间表
+create table group_code(
+c_id int(11) NOT NULL,
+g_id int(11) NOT NULL,
+primary key(c_id,g_id),
+foreign key(c_id) references code(id),
+foreign key(g_id) references group(id)
+)
