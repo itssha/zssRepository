@@ -91,6 +91,7 @@ function codeList(condition){
         {field: "selected",align:"center", title: "自选",width: "170",
             events:changeSelect,
             formatter:selectFormatter
+            
 
         },
         {field: "url",align:"center", title: "url",width: "170",
