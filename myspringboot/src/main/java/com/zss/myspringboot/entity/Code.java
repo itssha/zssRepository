@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,9 +29,10 @@ public class Code extends BaseEntity {
     private boolean selected = false;
 
 
-    @JsonIgnore
+   // @JsonIgnore
     @ManyToMany(mappedBy = "codes")
-    private Set<Group> groups;
+    private List<Group> groups;
+
 
 
     public String getCode() {
@@ -94,6 +96,16 @@ public class Code extends BaseEntity {
         this.nameCapital = nameCapital;
     }
 
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+
+
+        this.groups = groups;
+    }
 
 
 }

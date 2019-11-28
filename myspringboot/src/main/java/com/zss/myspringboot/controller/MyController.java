@@ -33,8 +33,7 @@ public class MyController {
     }
 
 
-    @RequestMapping("/groupTable")
-
+    @RequestMapping("/groupTable.html")
     public String groupTable(){
         return "groupTable";
     }

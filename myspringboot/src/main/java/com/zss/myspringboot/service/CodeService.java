@@ -22,5 +22,8 @@ public interface CodeService  extends EntityService<Code,Integer>{
     public Page<Code> findByName();
     public Page<Code> findBylabel();
     public int selected(int id,boolean selected);
+    public int level(int id,int level);
+    public int setLabels(int id,String labels);
+    public int setRemarks(int id,String labels);
 
 }

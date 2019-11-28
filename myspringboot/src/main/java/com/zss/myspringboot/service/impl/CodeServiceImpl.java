@@ -83,6 +83,21 @@ public   class CodeServiceImpl extends EntityServiceImpl<Code> implements CodeSe
     public int selected(int id,boolean selected) {
         return codeRepository.updateSelected(id,selected);
     }
+    @Override
+    public int level(int id,int level) {
+        return codeRepository.updateLevel(id,level);
+    }
+
+    @Override
+    public int setLabels(int id, String labels)  {
+        return codeRepository.updateLabels(id,labels);
+    }
+
+    @Override
+    public int setRemarks(int id, String labels) {
+        return codeRepository.updateRemarks(id,labels);
+    }
+
 
     /**
      * 属性名转换为字段名格式(userName -> user_name)

@@ -255,7 +255,7 @@ public class CodeCatch {
         PreparedStatement ps=null;
         //先判断这个代码是否存在
         String selectSql="SELECT * FROM CODE WHERE code=?";
-        String sql = "INSERT INTO code (code,name,url) VALUES(?,?,?)";        //插入sql语句
+        String sql = "INSERT INTO code (code,name,url,active) VALUES(?,?,?,1)";        //插入sql语句
 
        /* boolean flag=true;
         while (!flag)break;*/
@@ -266,7 +266,7 @@ public class CodeCatch {
             ps = conn.prepareStatement(selectSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,code);
            if(ps.executeQuery().next())  {
-               System.out.println("code存在");
+              // System.out.println("code存在");
                return;
            }
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);

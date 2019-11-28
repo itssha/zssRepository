@@ -18,6 +18,9 @@
 
     <link rel="stylesheet" href="js/bootstrap-table/bootstrap-table.css"/>
 
+    <!--编辑框组件-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
     <!--自定义
     -->
 
@@ -119,15 +122,7 @@
         <!-- header section start-->
         <div class="header-section">
 
-        <!--toggle button start-->
-        <a class="toggle-btn"><i class="fa fa-bars"></i></a>
-        <!--toggle button end-->
 
-        <!--search start-->
-        <form class="searchform" action="index.html" method="post">
-            <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
-        </form>
-        <!--search end-->
 
         <!--notification menu start -->
         <div class="menu-right">
@@ -357,7 +352,19 @@
                     <input  type="text"  class="form-control" placeholder="codeName" id="name">
 
                 </div>
+                <div  class="form-group col-lg-6">
+                    <select  class="form-control" id =levelSelect style="height:33px ">
+                        <option value ='' selected>请选择</option>
+                        <option value ='1' >一级</option>
+                        <option value ='2' >二级</option>
+                        <option value ='3' >三级</option>
+                        <option value ='4' >四级</option>
+                    </select>
+                </div>
+                <div  class="form-group col-lg-6">
+                    <input  type="text"  class="form-control" placeholder="labels" id="label">
 
+                </div>
 
 
 
@@ -367,6 +374,109 @@
      <button type="button" class="btn btn-default btn-lg" id="codeSearch">
             <!-- <span class="glyphicon" aria-hidden="true"></span>-->search
             </button>
+
+<!--modal-->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">编辑标签</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" class="form-horizontal">
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">id</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="modal_id">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">code</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="modal_code">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">codeName</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="modal_code_name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">labels</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="modal_labels">
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="close-LabelEdit-btn">关闭</button>
+                            <button type="button" class="btn btn-primary" id="save-LabelEdit-btn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--modal-->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModalRemark">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="modalRemarkTitle">编辑备忘</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" class="form-horizontal">
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">id</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="remark_modal_id">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">code</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="remark_modal_code">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">codeName</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" disabled="disabled" id="remark_modal_code_name">
+                                    </div>
+                                </div>
+                             </form>
+                                <div id="summernote"><p>Hello Summernote</p></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="close-RemarkEdit-btn">关闭</button>
+                            <button type="button" class="btn btn-primary" id="save-RemarkEdit-btn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <table  class="display table table-bordered table-striped"  id="AshockTable" >
@@ -422,5 +532,5 @@
 
 
 </body>
-<script src="js\myspringboot\AshockTable.js" >  </script>
+<script src="js\myspringboot\AShockTable.js" >  </script>
 </html>

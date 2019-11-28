@@ -1,4 +1,4 @@
-function EntityTable(tableId,entityName,condition,customerSearch) {
+function EntityTable(tableId,entityName,dataField,condition,customerSearch) {
     console.log("EntityTable.ctor:"+tableId+","+entityName);
     this.entityName=entityName;
     this.tableId=tableId;
@@ -16,14 +16,17 @@ function EntityTable(tableId,entityName,condition,customerSearch) {
                 idField: 'id',
                 sidePagination: 'server',
                 pagination: true,
-                dataField: 'content',
+                dataField: dataField,
                 totalField: 'totalElements',
                showColumns: true,
                sortStable: true,
                 pageSize:15,
-                checkboxEnabled:true,
-                singleSelect:true,
-                clickToSelect:true,
+                // checkboxEnabled:true,
+                // singleSelect:true,
+                // clickToSelect:true,
+                onClickRow:function(row,$e){
+                    index = $e.data('index');
+                },
                 onPageChange: function (number, limit) {
                     console.log('onPageChange:' + number + ',' + limit);
                     if(obj.customerSearch!=null){
@@ -56,7 +59,7 @@ function EntityTable(tableId,entityName,condition,customerSearch) {
     if(typeof this.load != 'function'){
         EntityTable.prototype.load=function () {
             var obj=this;
-            obj.loadData(obj.page,obj.limit,'id','desc');
+            obj.loadData(obj.page,obj.limit,'id','asc'/*'desc'*/);
 
         }
     }
@@ -114,7 +117,7 @@ function EntityTable(tableId,entityName,condition,customerSearch) {
     if(typeof this.search != 'function'){
         EntityTable.prototype.search=function(map, entity) {
             var obj=this;
-            obj.loadData(obj.page, obj.limit, 'id', 'desc', map,entity);
+            obj.loadData(obj.page, obj.limit, 'id', 'asc', map,entity);
         }
     }
     if(typeof this.searchByMap != 'function'){

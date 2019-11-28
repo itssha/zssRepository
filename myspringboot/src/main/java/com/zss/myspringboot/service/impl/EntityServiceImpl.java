@@ -275,6 +275,7 @@ public abstract class EntityServiceImpl<T extends BaseEntity> implements EntityS
     public Message<Page<T>> queryPage(ConditionModel<T> condition) {
         Message<Page<T>> msg = new Message<>();
         try {
+            System.out.println("queryPage:"+condition);
             T entity = condition.getEntity();
             Pageable pageable = getPageable(condition);
             if (entity == null) {

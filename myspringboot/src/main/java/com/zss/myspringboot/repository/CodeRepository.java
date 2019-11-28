@@ -15,14 +15,33 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CodeRepository extends EntityRepository <Code,Integer> {
-   /* @Query(value = "select * from code",
-            countQuery = "select count(*) from code",
-            nativeQuery = true)
-    public Page<Code> findAll(Pageable pageable);*/
+    /* @Query(value = "select * from code",
+             countQuery = "select count(*) from code",
+             nativeQuery = true)
+     public Page<Code> findAll(Pageable pageable);*/
     @Modifying
     @Query(
             "update Code c set selected= ?2 where c.id= ?1 "
-
     )
-   public int updateSelected(int id,boolean isSelected);
+    public int updateSelected(int id, boolean isSelected);
+
+    @Modifying
+    @Query(
+            "update Code c set level= ?2 where c.id= ?1 "
+    )
+    public int updateLevel(int id, int level);
+
+
+    @Modifying
+    @Query(
+            "update Code c set label= ?2 where c.id= ?1 "
+    )
+    public int updateLabels(int id, String label);
+
+
+    @Modifying
+    @Query(
+            "update Code c set remarks= ?2 where c.id= ?1 "
+    )
+    public int updateRemarks(int id, String Remarks);
 }

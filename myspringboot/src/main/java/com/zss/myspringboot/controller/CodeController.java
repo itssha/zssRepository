@@ -23,7 +23,7 @@ public class CodeController {
    @Resource
     private CodeService codeService;
     @RequestMapping(value="/queryPage", method=RequestMethod.POST)
-    public Message<Page<Code>>   /*Page<Code>*/  listcode(
+    public Message<Page<Code>>   /*Page<Code>*/  listCode(
             /* @RequestParam("condition")*/
             @RequestBody ConditionModel cm
             /* ,
@@ -47,10 +47,35 @@ public class CodeController {
     @RequestMapping("/select")
     //事务配置
     @Transactional
-    public int select(@RequestParam int id,boolean selected){
+    public int select(int id,boolean selected){
         /*return 1;*/
-        System.out.println(selected);
         return codeService.selected(id,selected);
+    }
+    @RequestMapping("/level")
+    //事务配置
+    @Transactional
+    public int setLevel(@RequestParam int id,int level){
+        /*return 1;*/
+        return codeService.level(id,level);
+    }
+
+    @RequestMapping("/labels")
+    //事务配置
+    @Transactional
+    public int setLabels(@RequestParam int id,String labels){
+      /*  return 1;*/
+        System.out.println(labels);
+        System.out.println(id);
+        return codeService.setLabels(id,labels);
+    }
+    @RequestMapping("/remarks")
+    //事务配置
+    @Transactional
+    public int setRemarks(@RequestParam int id,String remarks){
+        /*  return 1;*/
+        System.out.println(remarks);
+        System.out.println(id);
+        return codeService.setRemarks(id,remarks);
     }
     @RequestMapping("/test")
     public Page<Code> login() {

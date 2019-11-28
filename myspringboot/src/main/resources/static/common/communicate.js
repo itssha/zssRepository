@@ -39,6 +39,13 @@ function Condition(page,limit) {
             this.map[key]=value;
         }
     }
+    if (typeof this.setEntity != 'function') {
+        Condition.prototype.setEntity = function (entity) {
+            console.log('condition.setEntity');
+            if (typeof (entity) == 'undefined') return;
+            this.entity=entity;
+        }
+    }
     if (typeof this.addSort != 'function') {
         Condition.prototype.addSort = function (column,sortType) {
             console.log('condition.addSort:'+column+","+sortType);
@@ -109,7 +116,7 @@ function EntityDao(name) {
             var obj=this;
             console.log('dao.save');
             if(entity==null)return;
-            if(entity.id==null || typeof(entity.id) == 'undefined'){
+            if(entity.id==null || typeof(entity.id) == 'undefined'||entity.id==""||entity.id=="0"){
                 obj.add(entity,callBack);
             }else{
                 //更新 update,put,patch都行
@@ -386,7 +393,7 @@ function Ajax() {
                 url:url,
                 type:'POST',
                 data:data,
-                dataType:'json',//这种方式后端要用@ResponseBody
+            //    dataType:'json',
                 success:function (result) {
                     console.log('成功')
                     console.log(result);
@@ -409,7 +416,7 @@ function Ajax() {
             $.ajax({
                 url:url,
                 type:'POST',
-                dataType:'json',
+              //  dataType:'json',
                 contentType: 'application/json',//这种方式后端要加@ResquestBody
                 data:JSON.stringify(data),//必须用JSON.stringify转换一下
                 success:function (result) {
@@ -418,7 +425,8 @@ function Ajax() {
                     if(callBack!=null)
                         callBack(result);
                 },
-                error:function () {
+                error:function (err) {
+                    console.log(err)
                     console.log('失败')
                     if(callBack!=null)
                         callBack(null);
