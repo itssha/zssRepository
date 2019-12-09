@@ -24,6 +24,11 @@ public class ConditionModel<T> {
 
     private T entity;
 
+  private T manyToManyEntity;
+
+    private String manyToManyAttributeName ;
+    private Integer manyToManyJoinById ;
+
 
 
     public void setSort(Map<String, String> sort) {
@@ -466,9 +471,15 @@ public class ConditionModel<T> {
     public T getEntity() {
         return entity;
     }
+    public T getManyToManyEntity() {
+        return manyToManyEntity;
+    }
 
     public void setEntity(T entity) {
         this.entity = entity;
+    }
+    public void setManyToManyEntity(T manyToManyEntity) {
+        this.manyToManyEntity = manyToManyEntity;
     }
   // @JsonProperty
     public int getPage() {
@@ -486,5 +497,21 @@ public class ConditionModel<T> {
     public void setLimit(Integer limit) {
 
         this.limit = limit == null ? 15 : limit;
+    }
+
+    public String getManyToManyAttributeName() {
+        return manyToManyAttributeName;
+    }
+
+    public void setManyToManyAttributeName(String manyToManyAttributeName) {
+        this.manyToManyAttributeName = manyToManyAttributeName;
+    }
+
+    public Integer getManyToManyJoinById() {
+        return manyToManyJoinById;
+    }
+
+    public void setManyToManyJoinById(Integer manyToManyJoinById) {
+        this.manyToManyJoinById = manyToManyJoinById;
     }
 }

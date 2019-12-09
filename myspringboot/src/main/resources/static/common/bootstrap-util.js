@@ -18,7 +18,7 @@ function EntityTable(tableId,entityName,dataField,condition,customerSearch) {
                 pagination: true,
                 dataField: dataField,
                 totalField: 'totalElements',
-               showColumns: true,
+              // showColumns: true,
                sortStable: true,
                 pageSize:15,
                 // checkboxEnabled:true,
@@ -63,6 +63,9 @@ function EntityTable(tableId,entityName,dataField,condition,customerSearch) {
 
         }
     }
+
+
+
     if(typeof this.loadData != 'function'){
         EntityTable.prototype.loadData=function (page, limit,sortName,sortOrder,map,entity) {
             var obj=this;

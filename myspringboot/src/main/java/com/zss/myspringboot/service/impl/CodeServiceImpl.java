@@ -80,6 +80,12 @@ public   class CodeServiceImpl extends EntityServiceImpl<Code> implements CodeSe
     }
 
     @Override
+    public Optional<Code> findById(Integer codeId) {
+
+        return codeRepository.findById(codeId);
+    }
+
+    @Override
     public int selected(int id,boolean selected) {
         return codeRepository.updateSelected(id,selected);
     }

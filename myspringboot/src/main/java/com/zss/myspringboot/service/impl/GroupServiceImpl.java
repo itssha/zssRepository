@@ -8,6 +8,8 @@ import com.zss.myspringboot.service.GroupService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Optional;
+
 @Service
 public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupService {
     @Resource
@@ -15,5 +17,10 @@ public class GroupServiceImpl extends EntityServiceImpl<Group> implements GroupS
     @Override
     public EntityRepository<Group, Integer> getRepository() {
         return groupRepository;
+    }
+
+    @Override
+    public Optional<Group> findById(Integer id) {
+        return groupRepository.findById(id);
     }
 }

@@ -11,14 +11,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "sub_group")
-public class Group extends BaseEntity  {
+public class Group extends BaseEntity {
 
 
-
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "group_code",
-            joinColumns = @JoinColumn(name = "g_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id") )
+            joinColumns = @JoinColumn(name = "g_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "c_id", referencedColumnName = "id"))
 
 
     //1、关系维护端，负责多对多关系的绑定和解除
@@ -39,5 +38,20 @@ public class Group extends BaseEntity  {
 
     public void setCodes(List<Code> codes) {
         this.codes = codes;
+    }
+
+
+    public void addCode(Code code) {
+        if (!this.codes.contains(code)) {
+            this.codes.add(code);
+        }
+    }
+
+    public void removeCode(Code code) {
+        if (this.codes.contains(code)) {
+            //凭什么判断teacher在集合teachers中呢？是根据code的id
+            //这就有必要重写code.java的hasCode和equals方法，通过这两个方法来判断对象是否相等
+            this.codes.remove(code);
+        }
     }
 }

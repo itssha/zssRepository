@@ -87,8 +87,6 @@
 
             <!--sidebar nav start-->
             <ul class="nav nav-pills nav-stacked custom-nav">
-
-
                 <li class="menu-list nav-active"><a href="#"><i class="fa fa-th-list"></i> <span>Data Tables</span></a>
                     <ul class="sub-menu-list">
                         <li class="active"><a href="AshockTable.html"> AshockTable</a></li>
@@ -353,7 +351,7 @@
 
                 </div>
                 <div  class="form-group col-lg-6">
-                    <select  class="form-control" id =levelSelect style="height:33px ">
+                    <select  class="form-control" id =levelSelectSearch style="height:33px ">
                         <option value ='' selected>请选择</option>
                         <option value ='1' >一级</option>
                         <option value ='2' >二级</option>
@@ -366,14 +364,21 @@
 
                 </div>
 
+                <!--class=" tools pull-right"-->
+                <div id="toolbar" class="form-group col-lg-6" >
+                    <button type="button" class="btn btn-default " id="codeSearch">
+                        <!-- <span class="glyphicon" aria-hidden="true"></span>-->search
+                    </button>
+                    <button id="addStockBtn" class="btn btn-danger " >
+                        <i class="glyphicon glyphicon-remove"></i> 添加stock
+                    </button>
 
-
+                </div>
 
             </div>
 
-     <button type="button" class="btn btn-default btn-lg" id="codeSearch">
-            <!-- <span class="glyphicon" aria-hidden="true"></span>-->search
-            </button>
+
+
 
 <!--modal-->
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal">
@@ -419,8 +424,53 @@
                     </div>
                 </div>
             </div>
+ <!--modal-->
+ <!--addStock-->
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="addStockModal">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="addStockTitle">添加shock</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" class="form-horizontal">
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="addStockName">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">名称简拼</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="addStockNameCaption">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">代码</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  id="addStockCode">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">url</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  id="addStockUrl">
+                                    </div>
+                                </div>
 
-            <!--modal-->
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="close-addStock-btn">关闭</button>
+                            <button type="button" class="btn btn-primary" id="save-addStock-btn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  <!--addStock-->
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModalRemark">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
@@ -481,38 +531,13 @@
 
             <table  class="display table table-bordered table-striped"  id="AshockTable" >
 
-
-        <thead>
-        <tr>
-
-        </tr>
-        </thead>
-       <tbody>
-
-       </tbody>
-
-        <tfoot>
-
-        </tfoot>
         </table>
         </div>
         </div>
         </section>
         </div>
         </div>
-        <div class="row">
-        <div class="col-sm-12">
-        <section class="panel">
 
-        <div class="panel-body">
-        <div class="adv-table">
-
-
-        </div>
-        </div>
-        </section>
-        </div>
-        </div>
         </div>
         <!--body wrapper end-->
 

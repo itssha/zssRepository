@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,8 +26,8 @@ public class Code extends BaseEntity {
     private Integer level;
     @Column(name = "remarks")
     private String remarks;
-    @Column(name = "selected",columnDefinition = " bit default false")
-    private boolean selected = false;
+    @Column(name = "selected", nullable=true)
+    private Boolean selected ;
 
 
    // @JsonIgnore
@@ -57,7 +58,7 @@ public class Code extends BaseEntity {
         return remarks;
     }
 
-    public boolean isSelected() {
+    public Boolean isSelected() {
         return selected;
     }
 
@@ -83,7 +84,7 @@ public class Code extends BaseEntity {
         this.remarks = remarks;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(Boolean selected) {
         this.selected = selected;
     }
 
@@ -105,6 +106,20 @@ public class Code extends BaseEntity {
 
 
         this.groups = groups;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, code);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Code)) {
+            return false;
+        }
+        Code code = (Code) o;
+        return id == code.id ;
     }
 
 

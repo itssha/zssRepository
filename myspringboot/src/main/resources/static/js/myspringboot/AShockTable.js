@@ -9,7 +9,23 @@ $(function(){
 
 
 })
-
+var setLevel= {
+    'change #levelSelect': function (e, value, row, index) {
+        var newLevel=$('#levelSelect').val()
+        var levelUrl="code/level"
+        var data={id: row.id,level:newLevel};
+        getDao(entityName).ajax.post0(levelUrl,data,function (result){
+            if(result==1){
+                //修改row值
+                row.level=newLevel
+                entityTable.table.bootstrapTable('updateRow',{
+                    index:index,
+                    row:row
+                });
+            }
+        })
+    }
+}
 function selectFormatter(value, row, index) {
     var v="";
     if(value){
@@ -83,7 +99,7 @@ var setRemark={
         $("#myModalRemark").modal();
         $('#summernote').summernote({ height: 300});
         var markupStr = $('#summernote').summernote('code',row.remarks);
-        console.log(markupStr)
+        //console.log(markupStr)
     }
 }
 
@@ -99,23 +115,7 @@ var labelEdit={
         $("#myModal").modal();
     }
     }
-var setLevel= {
-    'change #levelSelect': function (e, value, row, index) {
-        var newLevel=$('#levelSelect').val()
-        var levelUrl="code/level"
-        var data={id: row.id,level:newLevel};
-        getDao(entityName).ajax.post0(levelUrl,data,function (result){
-            if(result==1){
-                //修改row值
-                row.level=newLevel
-                entityTable.table.bootstrapTable('updateRow',{
-                    index:index,
-                    row:row
-                });
-            }
-        })
-    }
-}
+
 var changeSelect={
     //修改
     "click #select0":function (e, value, row, index) {
@@ -140,7 +140,7 @@ var changeSelect={
 
 function levelFormatter(value, row, index) {
     var levelName={"1":"一级","2":"二级","3":"三级","4":"四级"}
-    var headOption = "<option value ='' selected>请选择</option>";
+    var headOption = "<option value ='5' selected>请选择</option>";
     var Option1= "<option value ='1'>"+levelName["1"]+"</option>";
     var Option2= "<option value ='2'>"+levelName["2"]+"</option>";
     var Option3= "<option value ='3'>"+levelName["3"]+"</option>";
@@ -174,11 +174,18 @@ function codeList(condition,dataField){
             }
         },
         {field: "id",align:"center", title: "id"},
-        {field: "code",align:"center", title: "代码",width: "170"},
+        {field: "code",align:"center", title: "代码",width: "170",
+            formatter:function(value, row, index) {
+                var v = '<a href=' + row.url + '>' +value+ '</a>'
+                return [
+                    v
+                ].join("")
+            }
+            },
         {field: "name",align:"center", title: "名称",width: "170"},
         {field: "nameCapital",align:"center", title: "名称",width: "170"},
 
-        {field: "level",align:"center", title: "等级",width: "170",
+        {field: "level",align:"center", title: "等级",width: "250",
             events:setLevel,
             formatter:levelFormatter},
         {field: "label",align:"center", title: "标签",width: "170",
@@ -209,7 +216,7 @@ function codeList(condition,dataField){
             formatter:selectFormatter
 
 
-        },
+        }/*,
         {field: "url",align:"center", title: "url",width: "170",
             formatter:function(value, row, index){
                var v='<a href='+value+'>'+ "链接"+'</a>'
@@ -218,7 +225,7 @@ function codeList(condition,dataField){
                 ].join("")
 
             }
-        }
+        }*/
     ];
 
     entityTable=new EntityTable('#AshockTable',entityName,dataField,condition);
@@ -232,11 +239,47 @@ $("#codeSearch").click(function () {
     codeList(getCondition());
 
 });
+$("#addStockBtn").click(function () {
+    $("#addStockName").val("");
+    $("#addStockCode").val("");
+    $("#addStockUrl").val("");
+    $("#addStockNameCaption").val("");
+    $("#addStockModal").modal();
+
+});
+
+$("#addStockCode").bind('input onchange', function(){
+    var urlHead="http://stockpage.10jqka.com.cn/";
+    var code=$("#addStockCode").val();
+    $("#addStockUrl").val(urlHead+code);
+});
+$("#save-addStock-btn").click(function () {
+
+    var name=$("#addStockName").val();
+    var code=$("#addStockCode").val();
+    var nameCaption=$("#addStockNameCaption").val();
+    var codeUrl=$("#addStockUrl").val();
+
+    var data={code:code,name:name,url:codeUrl,nameCapital:nameCaption};
+    getDao(entityName).save(data,function (result){
+      /*  if(result==1){
+            alert("保存成功")
+            entityTable.table.bootstrapTable('updateRow',{
+                index:index,
+                row:{
+                    remarks:modal_remarks
+                }
+            });
+        }else{
+            alert("保存失败")
+        }*/
+    })
+})
 
 function  getCondition() {
     var code=$('#code').val();
     var codeName=$('#name').val();
-    var level=$('#levelSelect').val()
+    var level=$('#levelSelectSearch').val()
     var label=$('#label').val()
     var page=1;
     var limit=15;
@@ -248,10 +291,10 @@ function  getCondition() {
     var pattern1 = new RegExp("[A-Za-z]+");
     if(pattern1.test(codeName)){
         condition.addMap('nameCapital','lk',codeName)
-        console.log('该字符串是英文');
+       // console.log('该字符串是英文');
     }else{
         condition.addMap('name','lk',codeName)
-        console.log('该字符串是中文');
+      //  console.log('该字符串是中文');
     }
     return condition;
 }

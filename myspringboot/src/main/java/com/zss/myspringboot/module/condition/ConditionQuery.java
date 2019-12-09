@@ -1,6 +1,7 @@
 package com.zss.myspringboot.module.condition;
 
 
+import com.zss.myspringboot.entity.Group;
 import com.zss.myspringboot.module.condition.ui.ConditionExpression;
 import com.zss.myspringboot.module.condition.ui.ConditionModel;
 import com.zss.myspringboot.module.condition.ui.OrderBy;
@@ -9,6 +10,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.StringUtils;
 
@@ -27,15 +29,17 @@ public class ConditionQuery<T> {
     private EntityManager entityManager;
 
     private Class<T> entityClass;
+    //private Class<T1> manyToManyEntityClass;
 
     private Root<T> itemRoot;
 
     private CriteriaQuery<T> query;
 
     private CriteriaBuilder criteriaBuilder;
+    //zss
+    private Specification<T> specification;
 
     //private EntityType<T> itemEntity;
-
     public ConditionQuery(EntityManager entityManager, Class<T> entityClass, ConditionModel cm){
         this.entityManager=entityManager;
         this.entityClass=entityClass;
@@ -62,6 +66,25 @@ public class ConditionQuery<T> {
         Predicate result= combinePredicateList(predicatesList);
         return result;
     }
+
+
+    public Predicate getPredicateTest(Root<T> itemRoot,CriteriaQuery<T> query,CriteriaBuilder criteriaBuilder){
+        this.itemRoot=itemRoot;
+        this.query=query;
+        this.criteriaBuilder=criteriaBuilder;
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        // 多表连接获取查询参数
+/*        Join<Code, Group> join = itemRoot.join("groups", JoinType.LEFT);
+        predicates.add(criteriaBuilder.equal(join.get("id"), 1));*/
+       // Class mtm=this.manyToManyEntity.getClass();
+
+        Join<T,T> join = itemRoot.join(cm.getManyToManyAttributeName(), JoinType.LEFT);
+        predicates.add(criteriaBuilder.equal(join.get("id"),cm.getManyToManyJoinById()));
+
+        Predicate[] p = new Predicate[predicates.size()];
+        return criteriaBuilder.and(predicates.toArray(p));
+    }
+
 
     private Predicate combinePredicateList(List<Predicate> predicates){
         Predicate result=null;

@@ -51,6 +51,8 @@ public interface EntityService<T extends BaseEntity,ID> {
     //条件查询分页
     public Message<Page<T>> queryPage(ConditionModel<T> condition);
 
+
+    public Message<Page<T>>  queryPageTest(ConditionModel<T> condition);
     //获取数量
     public Message<Long> getCount();
 }

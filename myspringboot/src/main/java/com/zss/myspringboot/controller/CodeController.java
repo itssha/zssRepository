@@ -1,6 +1,7 @@
 package com.zss.myspringboot.controller;
 
 import com.zss.myspringboot.entity.Code;
+import com.zss.myspringboot.entity.Group;
 import com.zss.myspringboot.model.Message;
 import com.zss.myspringboot.module.condition.ui.ConditionModel;
 import com.zss.myspringboot.service.CodeService;
@@ -25,7 +26,7 @@ public class CodeController {
     @RequestMapping(value="/queryPage", method=RequestMethod.POST)
     public Message<Page<Code>>   /*Page<Code>*/  listCode(
             /* @RequestParam("condition")*/
-            @RequestBody ConditionModel cm
+            @RequestBody ConditionModel<Code> cm
             /* ,
       Integer start, Integer limit*/){
 
@@ -35,14 +36,23 @@ public class CodeController {
         System.out.println(cm.getPage());
         System.out.println(cm.getLimit());
 
-        Iterator<Map.Entry<Integer, Integer>> it = cm.getMap().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Integer, Integer> entry = it.next();
-            System.out.println("key = " + entry.getKey() + ", value = " + entry.getValue());
-        }
-
-
+//        Iterator<Map.Entry<Integer, Integer>> it = cm.getMap().entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry<Integer, Integer> entry = it.next();
+//            System.out.println("key = " + entry.getKey() + ", value = " + entry.getValue());
+//        }
         return codeService.queryPage(cm);
+    }
+    @RequestMapping(value="/queryPageTest", method=RequestMethod.POST)
+    public Message<Page<Code>>    listCodeTest(
+
+            @RequestBody ConditionModel<Code> cm){
+
+        System.out.println(cm.getPage());
+        System.out.println(cm.getLimit());
+
+
+        return codeService.queryPageTest(cm);
     }
     @RequestMapping("/select")
     //事务配置
@@ -76,6 +86,20 @@ public class CodeController {
         System.out.println(remarks);
         System.out.println(id);
         return codeService.setRemarks(id,remarks);
+    }
+    @RequestMapping(value="/add", method=RequestMethod.POST)
+    public Message<Code>postGroup(@RequestBody Code code) {
+        // 处理"/users/"的POST请求，用来创建User
+        // 除了@ModelAttribute绑定参数之外，还可以通过@RequestParam从页面中传递参数
+        System.out.println("code");
+        code.setNameCapital( code.getNameCapital().toUpperCase());
+/*
+        System.out.println(code.getNameCapital());
+        System.out.println(code.getId());
+        System.out.println(code.getName());
+        System.out.println(code.getUrl());*/
+        /*return null;*/
+      return codeService.add(code);
     }
     @RequestMapping("/test")
     public Page<Code> login() {

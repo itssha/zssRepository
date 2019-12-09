@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
 
 
 public interface CodeService  extends EntityService<Code,Integer>{
@@ -21,6 +21,7 @@ public interface CodeService  extends EntityService<Code,Integer>{
     public Page<Code> findByCode();
     public Page<Code> findByName();
     public Page<Code> findBylabel();
+    public Optional<Code> findById(Integer codeId);
     public int selected(int id,boolean selected);
     public int level(int id,int level);
     public int setLabels(int id,String labels);

@@ -1,12 +1,10 @@
-package com.zss.client;
+package com.zss.myspringboot.client;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
-import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
 
@@ -15,7 +13,7 @@ public class AshockNameCapital {
 
 
         //数据库连接
-        CodeCatch codeCatch=new CodeCatch();
+        CodeCatchFromSina codeCatch=new CodeCatchFromSina();
         Connection conn=  codeCatch.connectInit();
         //处理大写
 
@@ -44,7 +42,7 @@ public class AshockNameCapital {
         //先判断这个代码是否存在
         String selectSql="SELECT name FROM CODE";
         //update code set namecapital='WK' Where name='万科';
-        String sql = "update  code set namecapital=? WHERE name=?";        //插入sql语句
+        String sql = "update  code set name_capital=? WHERE name=?";        //插入sql语句
 
        /* boolean flag=true;
         while (!flag)break;*/

@@ -1,6 +1,7 @@
 var entityName = 'group';
 var  entityTable=null;
-
+var  codeSearchEntityTable=null;
+var  groupIdCurrent=null;
 $(function(){
 
     groupList(getCondition(),'content');
@@ -17,7 +18,34 @@ $(function(){
        }
     })
 
+
 })
+$("#modal_group_code_name").bind('input onchange', function(){
+  /*  alert("modal_group_code_name.onchange")*/
+    var codeNameOrNameCaption=$('#modal_group_code_name').val();
+    /*console.log(codeNameOrNameCaption)*/
+    var condition=new Condition();
+    condition.setPage(0,15);
+    //如果全是数字 ^\d{m,n}$  1-6位数字
+    var patternNum=new RegExp("^\\d{1,6}$")
+    if(patternNum.test(codeNameOrNameCaption)){
+        condition.addMap('code','lk',codeNameOrNameCaption);
+        console.log('该字符串是1-6位数字');
+    }else {
+        var pattern1 = new RegExp("[A-Za-z]+");
+        if(pattern1.test(codeNameOrNameCaption)){
+            condition.addMap('nameCapital','lk',codeNameOrNameCaption)
+            console.log('该字符串是英文');
+        }else{
+            condition.addMap('name','lk',codeNameOrNameCaption)
+            console.log('该字符串是中文');
+        }
+    }
+
+   addCodeToGroup(condition,'content')
+})
+
+
 function saveData(index, field, value) {
     /*entityTable.table.bootstrapTable('updateCell', {
         index: index,       //行索引
@@ -33,33 +61,32 @@ function saveData(index, field, value) {
 
 var groupEdit={
     'click #groupEditBut':function (e,value,row,index) {
-        console.log(row)
+        console.log("groupEditBut")
         $("#modal_group_id").val(row.id)
         $("#modal_group_name").val(row.name)
+        $("#modal_group_code_name").val("");
+        if(codeSearchEntityTable!=null)codeSearchEntityTable.table.bootstrapTable("destroy")
+
+        groupIdCurrent=row.id;
         $("#groupModel").modal();
     }
 }
-$("#save-groupEdit-btn").click(function () {
-
+var saveGroup= function() {
     $('#groupModel').modal('hide');
     var modal_group_id = $("#modal_group_id").val();
     var modal_group_name = $("#modal_group_name").val();
-
-    var labelUrl="group/update";
     var data={id: modal_group_id,name:modal_group_name};
     //后台接不到group对象post0可以接收到
-    getDao(entityName).save(data)
-   /* getDao(entityName).ajax.post0(labelUrl,data,function (result){
-        if(result=="success"){
-            alert("保存成功")
-        }else{
-            alert("保存失败")
-        }
+    getDao(entityName).save(data/*,function (result) {
+        console.log(result)
+
+    }*/)
+    location.reload()
 
 
-    })*/
-
-
+}
+$("#save-groupEdit-btn").click(function () {
+    saveGroup();
 })
 
 
@@ -67,6 +94,7 @@ $("#groupAdd").click(function() {
     //模态框
     $("#modal_group_id").val("")
     $("#modal_group_name").val("");
+    $("#codeNameDiv").hide();
     $("#groupModel").modal();
    /* entityTable.table.bootstrapTable('insertRow', {
         index: 0,
@@ -77,7 +105,23 @@ $("#groupAdd").click(function() {
 
 });
 
+var addCodeToGroupAjax={
+    'click #addCodeToGroupBut':function (e,value,row,index) {
 
+      /*  console.log(groupIdCurrent);*/
+        var addCodeToGroupUrl="group/addOrRemoveCode"
+        var data={"groupId":groupIdCurrent,"codeId":row.id}
+        console.log("row.groups")
+        console.log(row.groups)
+       getDao(entityName).ajax.post0(addCodeToGroupUrl,data,function (result) {
+           if(result!=null){
+               codeSearchEntityTable.load()
+           }
+
+       })
+
+    }
+}
 var groupViewBut={
     'click #groupViewBut':function (e,value,row,index) {
         var columns=[
@@ -93,7 +137,14 @@ var groupViewBut={
                 }
             },
             {field: "id",align:"center", title: "id"},
-            {field: "code",align:"center", title: "代码",width: "170"},
+            {field: "code",align:"center", title: "代码",width: "170",
+                formatter:function(value, row, index) {
+                    var v = '<a href=' + row.url + '>' +value+ '</a>'
+                    return [
+                        v
+                    ].join("")
+                }
+            },
             {field: "name",align:"center", title: "名称",width: "170"},
             {field: "nameCapital",align:"center", title: "名称",width: "170"},
 
@@ -122,14 +173,14 @@ var groupViewBut={
                     ].join("")
 
                 }
-            },
+            }/*,
             {field: "selected",align:"center", title: "自选",width: "170",
                 events:changeSelect,
                 formatter:selectFormatter
 
 
-            },
-            {field: "url",align:"center", title: "url",width: "170",
+            },*/
+           /* {field: "url",align:"center", title: "url",width: "170",
                 formatter:function(value, row, index){
                     var v='<a href='+value+'>'+ "链接"+'</a>'
                     return [
@@ -137,26 +188,72 @@ var groupViewBut={
                     ].join("")
 
                 }
-            }
+            }*/
         ];
         console.log(row.id)
         var page=1;
         var limit=15;
         var condition=new Condition();
         condition.setPage(page-1,limit);
+        condition.setManyToManyAttributeName("groups");
+        condition.setManyToManyJoinById(row.id)
+        condition.setManyToManyEntity({"id":row.id,"codes":[]})
       //  condition.addMap("id",row.id);
       //  var entity={'id':row.id};
-        var   entity={"id":row.id};
+      //  var   entity={"groups":[{"id":2}]};
       //  condition.setEntity(entity);
         entityTable=new EntityTable('#aShockTableByGroup','code','content',condition);
 
         entityTable.init(columns);
+        entityTable.load();
 
-        entityTable.searchByEntity(entity)
         $("#groupByModel").modal();
     }
 }
+var groupViewButTest={
+    'click #groupViewBut':function (e,value,row,index) {
+        //直接加载AstockTable.html
+        $("#groupByModel").modal();
 
+    }
+}
+
+function addCodeToGroup(condition,dataField){
+ //   modal_group_code_name
+    var columns=[
+        {field: "id",align:"center", title: "id"},
+        {field: "code",align:"center", title: "代码",width: "170"},
+        {field: "name",align:"center", title: "名称",width: "170"},
+        {field: "edit",align:"center", title: "添加或移除",events:addCodeToGroupAjax,
+            formatter:function (value, row, index) {
+                console.log("添加或移除")
+            console.log(row.groups)
+                var title='添加';
+              /*  for(var group in row.groups){
+                    console.log("field")
+                    console.log(group);
+                    console.log(groupIdCurrent);
+                    if(group.id==groupIdCurrent) title='移除';
+                }*/
+                for(var i=0;i<row.groups.length;i++)
+                {
+                    row.groups[i];
+                    console.log(groupIdCurrent);
+                    if(row.groups[i].id==groupIdCurrent)title='移除';
+                }
+                return [
+                    '<button id="addCodeToGroupBut" type="button" class="btn btn-default">'+title+'</button>'
+                ].join("")
+            }
+        }
+    ]
+
+    codeSearchEntityTable=new EntityTable('#addAShockTableToGroup','code',dataField,condition);
+
+    codeSearchEntityTable.init(columns);
+
+    codeSearchEntityTable.load();
+}
 function groupList(condition,dataField){
 
     var columns=[

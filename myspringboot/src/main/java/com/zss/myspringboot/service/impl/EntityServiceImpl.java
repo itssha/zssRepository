@@ -277,15 +277,23 @@ public abstract class EntityServiceImpl<T extends BaseEntity> implements EntityS
         try {
             System.out.println("queryPage:"+condition);
             T entity = condition.getEntity();
+            T manyToManyEntity=condition.getManyToManyEntity();
             Pageable pageable = getPageable(condition);
-            if (entity == null) {
+            if (entity == null && manyToManyEntity==null) {
                 ConditionQuery queryUtil = new ConditionQuery(entityManager, entityClass, condition);
                 Page<T> page = getRepository().findAll((itemRoot, query, criteriaBuilder) -> {  //需要JpaSpecificationExecutor接口
                     Predicate result = queryUtil.getPredicate(itemRoot, query, criteriaBuilder);
                     return result;
                 }, pageable);
                 msg.setSuccess(page);
-            } else { //QueryByExample
+            } else if(manyToManyEntity!=null){
+                ConditionQuery queryUtil = new ConditionQuery(entityManager, entityClass, condition);
+                Page<T> page = getRepository().findAll((itemRoot, query, criteriaBuilder) -> {  //需要JpaSpecificationExecutor接口
+                    Predicate result = queryUtil.getPredicateTest(itemRoot, query, criteriaBuilder);
+                    return result;
+                }, pageable);
+                msg.setSuccess(page);
+            }else{ //QueryByExample
                 ExampleMatcher matcher = ExampleMatcher.matching();
                 Example<T> ex = Example.of(entity, matcher);
                 Page<T> page = getRepository().findAll(ex, pageable);
@@ -296,7 +304,25 @@ public abstract class EntityServiceImpl<T extends BaseEntity> implements EntityS
         }
         return msg;
     }
+    public Message<Page<T>> queryPageTest(ConditionModel<T> condition) {
+        Message<Page<T>> msg = new Message<>();
+        try {
+            System.out.println("queryPage:"+condition);
+            T entity = condition.getEntity();
+            Pageable pageable = getPageable(condition);
 
+                ConditionQuery queryUtil = new ConditionQuery(entityManager, entityClass, condition);
+                Page<T> page = getRepository().findAll((itemRoot, query, criteriaBuilder) -> {  //需要JpaSpecificationExecutor接口
+                    Predicate result = queryUtil.getPredicateTest(itemRoot, query, criteriaBuilder);
+                    return result;
+                }, pageable);
+                msg.setSuccess(page);
+
+        } catch (Exception ex) {
+            msg.setFailure(ex);
+        }
+        return msg;
+    }
     public Pageable getPageable(ConditionModel<T> condition){
         List<Sort.Order> orders=new ArrayList<>();
         for (OrderBy orderBy : condition.getOrderBys()) {

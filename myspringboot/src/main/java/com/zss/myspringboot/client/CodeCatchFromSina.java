@@ -1,4 +1,4 @@
-package com.zss.client;
+package com.zss.myspringboot.client;
 
 
 import org.apache.commons.lang3.StringUtils;
@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.*;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-public class CodeCatch {
+public class CodeCatchFromSina {
 
 
     public static Connection connectInit()  throws ClassNotFoundException {
@@ -46,7 +45,7 @@ public class CodeCatch {
     public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
         //连接数据库
         Connection conn=  connectInit();
-       getAStock(conn);
+       getAStockFromSina(conn);
        close(conn);
 
     }
@@ -182,7 +181,7 @@ public class CodeCatch {
             }
         }
     }
-    private static void getAStock (Connection conn) throws IOException {
+    private static void getAStockFromSina (Connection conn) throws IOException {
 
 
         // 获取新浪78也的所有股票代码
@@ -208,7 +207,7 @@ public class CodeCatch {
            getBatchStackCodeAndNameAndUrl(url,conn);
 
         }
-        close(conn);
+
 
 
 
@@ -262,7 +261,7 @@ public class CodeCatch {
 
 
         try {
-            System.out.println("开始检查");
+           // System.out.println("开始检查");
             ps = conn.prepareStatement(selectSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,code);
            if(ps.executeQuery().next())  {
@@ -276,6 +275,7 @@ public class CodeCatch {
             ps.setString(3,url);
             ps.executeUpdate();            //执行sql语句
             System.out.println("insert success");
+            System.out.println(code+name);
         } catch (SQLException e) {
             e.printStackTrace();
         }

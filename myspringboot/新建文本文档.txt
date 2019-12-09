@@ -11,3 +11,6 @@ primary key(c_id,g_id),
 foreign key(c_id) references code(id),
 foreign key(g_id) references group(id)
 )
+
+
+每天更新价格，，，更新破净股，，，，，

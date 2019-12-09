@@ -12,6 +12,9 @@ function Condition(page,limit) {
     this.map={};
     this.sort={};
     this.entity=null;
+    this.manyToManyEntity=null;
+    this.manyToManyAttributeName=null;
+    this.manyToManyJoinById=null;
     if (typeof this.setPropertyByJson != 'function') {
         Condition.prototype.setPropertyByJson = function (json) {
             console.log('condition.setPropertyByJson');
@@ -21,6 +24,9 @@ function Condition(page,limit) {
             this.limit = obj.limit;
             this.map = obj.map;
             this.sort = obj.sort;
+            this.manyToManyEntityAttribute=obj.manyToManyEntityAttribute;
+            this.manyToManyEntity=obj.manyToManyEntity;
+            this.manyToManyJoinById==obj.manyToManyJoinById;
         }
     }
     if (typeof this.setPage != 'function') {
@@ -31,6 +37,23 @@ function Condition(page,limit) {
             this.limit=limit;
         }
     }
+    if (typeof this.manyToManyAttributeName != 'function') {
+        Condition.prototype.setManyToManyAttributeName= function (manyToManyAttributeName) {
+            console.log('condition.setManyToManyAttributeName');
+            if (typeof (manyToManyAttributeName) == 'undefined') return;
+            this.manyToManyAttributeName=manyToManyAttributeName;
+
+        }
+    }
+    if (typeof this.setManyToManyJoinById != 'function') {
+        Condition.prototype.setManyToManyJoinById = function (manyToManyJoinById) {
+            console.log('condition.setManyToManyJoinById');
+            if (typeof (manyToManyJoinById) == 'undefined') return;
+            this.manyToManyJoinById=manyToManyJoinById;
+
+        }
+    }
+
     if (typeof this.addMap != 'function') {
         Condition.prototype.addMap = function (column,op,value) {
             console.log('condition.addMap');
@@ -44,6 +67,14 @@ function Condition(page,limit) {
             console.log('condition.setEntity');
             if (typeof (entity) == 'undefined') return;
             this.entity=entity;
+        }
+    }
+
+    if (typeof this.setManyToManyEntity != 'function') {
+        Condition.prototype.setManyToManyEntity = function (manyToManyEntity) {
+            console.log('condition.setManyToManyEntity');
+            if (typeof (manyToManyEntity) == 'undefined') return;
+            this.manyToManyEntity=manyToManyEntity;
         }
     }
     if (typeof this.addSort != 'function') {
@@ -230,6 +261,14 @@ function EntityDao(name) {
         EntityDao.prototype._queryPage = function (condition,callBack) {
             console.log('dao._queryPage');
             var url=this.name+'/queryPage';
+            this.ajax.post(url,condition,callBack);
+        }
+    }
+
+    if (typeof this._queryPageTest != 'function') {
+        EntityDao.prototype._queryPageTest = function (condition,callBack) {
+            console.log('dao._queryPageTest');
+            var url=this.name+'/queryPageTest';
             this.ajax.post(url,condition,callBack);
         }
     }
